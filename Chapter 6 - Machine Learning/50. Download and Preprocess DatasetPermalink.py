@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv('./NewsAggregatorDataset/newsCorpora.csv',
+df = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/newsCorpora.csv',
                 header=None,
                 sep='\t',
                 names=['ID', 'TITLE', 'URL', 'PUBLISHER', 'CATEGORY', 'STORY', 'HOSTNAME', 'TIMESTAMP']
@@ -11,7 +11,7 @@ df = df.loc[df['PUBLISHER'].isin(['Reuters', 'Huffington Post', 'Businessweek', 
 
 print(df)
 
-# Randomly shuffle the extracted articles.
+# Randomly shuffle the extracted articles
 # The frac parameter specifies the fraction of rows to return in the random sample. Range [0; 1]
 # The random_state parameter is used to ensure reproducibility.
 shuffled_df = df.sample(frac = 0.5, random_state = 42)
@@ -32,9 +32,9 @@ valid, valid_test = train_test_split(df, test_size = 0.9, shuffle = True, random
 test, test_test = train_test_split(df, test_size = 0.9, shuffle = True, random_state = 42,  stratify = df['CATEGORY'])
 
 # save data
-train.to_csv('./train.txt', sep='\t', index=False)
-valid.to_csv('./valid.txt', sep='\t', index=False)
-test.to_csv('./test.txt', sep='\t', index=False)
+train.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/train.txt', sep='\t', index=False)
+valid.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/valid.txt', sep='\t', index=False)
+test.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/test.txt', sep='\t', index=False)
 
 # count
 # shape return the number of rows and columns in the DataFrame or array, respectively.

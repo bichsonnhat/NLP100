@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # read info
-df = pd.read_csv('./NewsAggregatorDataset/newsCorpora.csv',
+df = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/newsCorpora.csv',
                 header=None,
                 sep='\t',
                 names=['ID', 'TITLE', 'URL', 'PUBLISHER', 'CATEGORY', 'STORY', 'HOSTNAME', 'TIMESTAMP']
@@ -16,10 +16,16 @@ df = df.loc[df['PUBLISHER'].isin(['Reuters', 'Huffington Post', 'Businessweek', 
 # load current(train, valid, test) csv 
 # try to get diffirent ways 
 columns = ['URL', 'CATEGORY', 'HOSTNAME']
-train = pd.read_csv('./train.txt', names = ['URL', 'CATEGORY', 'HOSTNAME'], sep = '\t')
-valid = pd.read_csv('./valid.txt', names = columns, sep = '\t')
-test = pd.read_csv('./test.txt', names = columns, sep = '\t')
-print(df)
+x_train = pd.read_csv('./train.txt', names = columns, sep = '\t')
+x_valid = pd.read_csv('./valid.txt', names = columns, sep = '\t')
+x_test = pd.read_csv('./test.txt', names = columns, sep = '\t')
+
+x_train.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/train.feature.txt',
+               sep='\t', header=False, index=False)
+x_valid.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/valid.feature.txt',
+               sep='\t', header=False, index=False)
+x_test.to_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/test.feature.txt',
+              sep='\t', header=False, index=False)
 # ---------------------------------------------------------------------------------------------------------------------------
 # def preprocessing(text):
 #     table = str.maketrans(string.punctuation, ' '*len(string.punctuation))
