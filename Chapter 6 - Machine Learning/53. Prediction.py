@@ -9,31 +9,47 @@ from sklearn.metrics import confusion_matrix
 # import statsmodels.api as sm
 from argparse import ArgumentParser
 
+def get_option():
+    argparser = ArgumentParser()
+
+    argparser.add_argument('--corpus', default='C:/Users/ADMIN/Desktop/NewsAggregatorDataset/newsCorpora.csv')
+    
+    argparser.add_argument('--train', default='train.txt')
+    argparser.add_argument('--valid', default='valid.txt')
+    argparser.add_argument('--test', default='test.txt')
+    
+    argparser.add_argument('--train_feature', default='train.feature.txt')
+    argparser.add_argument('--valid_feature', default='valid.feature.txt')
+    argparser.add_argument('--test_feature', default='test.feature.txt')
+    
+    argparser.add_argument('--result', default='result.png')
+
+    return argparser.parse_args()
+
+def train(X_train, Y_train):
+    lg = LogisticRegression(random_state=0, max_iter=10000)
+    lg.fit(X_train, Y_train)
+
+    return lg
+
 def predict(lg, X):
     return ([np.max(lg.predict_proba(X), axis=1), lg.predict(X)])
-columns = ('CATEGORY')
 
-train = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/train.txt', names = columns, sep = '\t')
-valid = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/valid.txt', names = columns, sep = '\t')
-test = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/test.txt', names = columns, sep = '\t')
+def main():
+    args = get_option()
 
-# confuse ...
-lableINT = {'b': 0, 't': 1, 'e': 2, 'm': 3}
-y_train = train['CATEGORY'].map(lableINT) 
-y_valid = valid['CATEGORY'].map(lableINT)
-y_test = test['CATEGORY'].map(lableINT)
-del train, valid, test
+    df_train = pd.read_csv(args.train, sep='\t')
+    df_valid = pd.read_csv(args.valid, sep='\t')
+    df_test = pd.read_csv(args.test, sep='\t')
 
-x_train = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/train.feature.txt',
-                      sep='\t', header=None)
-x_valid = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/valid.feature.txt',
-                      sep='\t', header=None)
-x_test = pd.read_csv('C:/Users/ADMIN/Desktop/NewsAggregatorDataset/test.feature.txt',
-                     sep='\t', header=None)
+    X_train = pd.read_csv(args.train_feature, sep='\t')
+    X_valid = pd.read_csv(args.valid_feature, sep='\t')
+    X_test = pd.read_csv(args.test_feature, sep='\t')
 
-# error ?
-lg = LogisticRegression(class_weight='balanced')
-lg.fit(x_train, y_train)
+    lg = train(X_train, df_train['CATEGORY'])
 
-train_predict = predict(lg, x_train)
-test_predict = predict(lg, x_test)
+    train_pred = predict(lg, X_train)
+    test_pred = predict(lg, X_test)
+
+if __name__ == '__main__':
+    main()
